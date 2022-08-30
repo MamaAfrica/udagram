@@ -17,28 +17,16 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // });
 
   app.get( "/filteredimage/", async ( req: Request, res: Response ) => {
-    const {image_url}= req.query;
-    // res.send(image_url)
+    const image_url: string= req.query.image_url;
     if (!image_url){
       return res.status(400)
       .send(`image url is required`);
     }
-    const image= await filterImageFromURL(image_url);
-    res.sendFile(image);
+    const image: string = await filterImageFromURL(image_url);
+    res.status(200).sendFile(image, ()=>{deleteLocalFiles([image])});
     console.log(image)
   } );
 
-  app.get( "/deleteimage/", async ( req: Request, res: Response ) => {
-    const {image_name}= req.query;
-    if (!image_name){
-      return res.status(400)
-      .send(`image name is required`);
-    }
-    const path = `C:/Users/HP/Desktop/cloud-developer-master/cloud-developer-master/course-02/project/image-filter-starter-code/src/util/tmp/${image_name}`
-    // const image= await filterImageFromURL(image_url);
-      const removed= await deleteLocalFiles([path]);
-      res.send('deleted successfully');
-  } );
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
   // endpoint to filter an image from a public url.
